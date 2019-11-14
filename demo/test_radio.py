@@ -3,6 +3,8 @@ from time import sleep
 import autoit
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.wait import WebDriverWait
+
 
 def test_input(driver): # 输入框
     driver.get("http://ui.yansl.com/#/input")
@@ -121,3 +123,32 @@ def test_windows(driver):
         if driver.title.__contains__("京东"):
             break
 
+
+
+def test_iframe(driver):
+    driver.get("http://192.168.1.128:8082/xuepl1/frame/main.html")
+    sleep(2)
+    frame = driver.find_element_by_xpath('/html/frameset/frameset/frame[1]')
+    driver.switch_to_frame(frame)
+    sleep(2)
+    driver.find_element_by_link_text('京东').click()
+    sleep(2)
+    driver.switch_to.parent_frame()
+    sleep(2)
+    iframe = driver.find_element_by_xpath("/html/frameset/frameset/frame[2]")
+    driver.switch_to.frame(iframe)
+    sleep(2)
+    input = driver.find_element_by_xpath('//*[@id="key"]')
+    input.clear()
+    input.send_keys("手机")
+    sleep(2)
+
+def test_wait(driver):
+    driver.get("http://ui.yansl.com/#/loading")
+    bt = driver.find_element_by_xpath('//*[@id="test_wait"]/span')
+    bt.click()
+    driver.implicitly_wait(5) # 隐试等待
+    bt1 = driver.find_element_by_xpath('//*[@id="form"]/form/div[1]/div/div/div[3]/table/tbody/tr[1]/td[2]/div')
+
+    print(bt1.text)
+    sleep(2)
